@@ -74,11 +74,12 @@ def add_todo():
     data = request.get_json()
     todo = new_todo(data)
     if todo:
-        todo_list.append(todo)
-        return jsonify(todo)
+        db.session.add(todo)                       # บรรทัดที่ปรับใหม่
+        db.session.commit()                        # บรรทัดที่ปรับใหม่ 
+        return jsonify(todo.to_dict())             # บรรทัดที่ปรับใหม่
     else:
         # return http response code 400 for bad requests
-        return (jsonify({'error': 'Invalid todo data'}), 400)  
+        return (jsonify({'error': 'Invalid todo data'}), 400)
     
 
 @app.route('/api/todos/<int:id>/toggle/', methods=['PATCH'])
@@ -99,3 +100,7 @@ def delete_todo(id):
         return (jsonify({'error': 'Todo not found'}), 404)
     todo_list = [todo for todo in todo_list if todo['id'] != id]
     return jsonify({'message': 'Todo deleted successfully'})
+
+def new_todo(data):
+    return TodoItem(title=data['title'], 
+                    done=data.get('done', False))

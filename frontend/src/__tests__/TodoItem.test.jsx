@@ -15,6 +15,7 @@ describe('TodoItem', () => {
       <TodoItem todo={baseTodo} />
     );
     expect(screen.getByText('Sample Todo')).toBeInTheDocument();
+    expect(screen.getByText('No comments')).toBeInTheDocument();
 
   });
 
@@ -36,5 +37,5 @@ describe('TodoItem', () => {
     //
   });
 
-  
+
 });

@@ -19,15 +19,14 @@ function TodoItem({
       <button onClick={() => deleteTodo(todo.id)}>❌</button>
 
       {/* ✅ ถ้าไม่มี comment */}
-      {todo.comments?.length === 0 && (
+      {todo.comments && todo.comments.length === 0 && (
         <p>No comments</p>
       )}
 
       {/* ✅ ถ้ามี comment */}
-      {todo.comments?.length > 0 && (
+      {todo.comments && todo.comments.length > 0 && (
         <>
           <b>Comments:</b>
-          <p>{todo.comments.length}</p>
           <ul>
             {todo.comments.map(comment => (
               <li key={comment.id}>{comment.message}</li>

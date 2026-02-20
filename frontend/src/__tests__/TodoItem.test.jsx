@@ -4,7 +4,7 @@ import TodoItem from '../TodoItem.jsx'
 
 const baseTodo = {             // ** TodoItem พื้นฐานสำหรับทดสอบ
   id: 1,
-  title: 'Sample Todo',
+  title: 'No comments',
   done: false,
   comments: [],
 };
@@ -14,7 +14,7 @@ describe('TodoItem', () => {
     render(
       <TodoItem todo={baseTodo} />
     );
-    expect(screen.getByText('Sample Todo')).toBeInTheDocument();
+    expect(screen.getByText('No comments')).toBeInTheDocument();
 
   });
 

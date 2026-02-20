@@ -15,7 +15,6 @@ describe('TodoItem', () => {
       <TodoItem todo={baseTodo} />
     );
     expect(screen.getByText('Sample Todo')).toBeInTheDocument();
-    expect(screen.getByText('No comments')).toBeInTheDocument();
 
   });
 
@@ -32,6 +31,8 @@ describe('TodoItem', () => {
       <TodoItem todo={todoWithComment} />
     );
     expect(screen.getByText('Sample Todo')).toBeInTheDocument();
+    expect(screen.getByText('No comments')).toBeInTheDocument();
+
     //
     // *** TODO: ให้เพิ่ม assertion ว่ามีข้อความ First comment และ Another comment บนหน้าจอ
     //

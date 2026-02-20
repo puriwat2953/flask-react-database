@@ -6,7 +6,7 @@ const mockResponse = (body, ok = true) =>
   Promise.resolve({
     ok,
     json: () => Promise.resolve(body),
-});
+}); 
 
 describe('App', () => {
   beforeEach(() => {
@@ -17,6 +17,7 @@ describe('App', () => {
     vi.resetAllMocks();
     vi.unstubAllGlobals();
   });
+  
 
   it('renders correctly', async () => {
     global.fetch.mockImplementationOnce(() =>

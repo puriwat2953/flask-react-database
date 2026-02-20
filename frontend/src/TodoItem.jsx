@@ -1,7 +1,12 @@
 import './App.css'
 import { useState } from 'react'
 
-function TodoItem({todo, toggleDone, deleteTodo, addNewComment}) {
+function TodoItem({
+  todo,
+  toggleDone = () => {},
+  deleteTodo = () => {},
+  addNewComment = () => {}
+}) {
   const [newComment, setNewComment] = useState("");
 
   return (
@@ -13,13 +18,13 @@ function TodoItem({todo, toggleDone, deleteTodo, addNewComment}) {
       <button onClick={() => toggleDone(todo.id)}>Toggle</button>
       <button onClick={() => deleteTodo(todo.id)}>❌</button>
 
-      {/* ✅ ไม่มี comment */}
-      {todo.comments && todo.comments.length === 0 && (
+      {/* ✅ ถ้าไม่มี comment */}
+      {todo.comments?.length === 0 && (
         <p>No comments</p>
       )}
 
-      {/* ✅ มี comment */}
-      {todo.comments && todo.comments.length > 0 && (
+      {/* ✅ ถ้ามี comment */}
+      {todo.comments?.length > 0 && (
         <>
           <b>Comments:</b>
           <p>{todo.comments.length}</p>

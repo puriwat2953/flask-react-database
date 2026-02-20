@@ -6,7 +6,7 @@ const baseTodo = {
   id: 1,
   title: 'Sample Todo',
   done: false,
-  comments: [],
+  comments: [], 
 };
 describe('TodoItem', () => {
   it('renders with no comments correctly', () => {
@@ -16,7 +16,7 @@ describe('TodoItem', () => {
         expect(screen.getByText('No comments')).toBeInTheDocument();
   });
 
-  it('renders with comments correctly', () => {
+  it('renders with commets correctly', () => {
     const todoWithComment = {
       ...baseTodo,
       comments: [
@@ -79,5 +79,5 @@ describe('TodoItem', () => {
 
     expect(onAddNewComment).toHaveBeenCalledWith(baseTodo.id, 'New comment');
   });
-  
+
   });

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { vi } from 'vitest'
-import App from '../App.jsx'
+import App from '../TodoList.jsx'
 
 const mockResponse = (body, ok = true) =>
   Promise.resolve({
@@ -71,5 +71,5 @@ describe('App', () => {
 
     // ตรวจสอบว่า todo item นั้นเปลี่ยนคลาสเป็น done แล้ว
     expect(await screen.findByText('First todo')).toHaveClass('done');
-  });
+  }); 
 });

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import TodoItem from './TodoItem.jsx'
-import { useAuth } from './context/AuthContext.jsx';
+import { useAuth } from './AuthContext.jsx';
 
 import './App.css'
 

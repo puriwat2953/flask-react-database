@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useAuth } from "./AuthContext";
+import { useNavigate } from 'react-router-dom' // ✅ เพิ่ม import
+import { useAuth } from "./context/AuthContext.jsx"; // ✅ แก้ path
 import './App.css'
 
 function LoginForm({loginUrl}) {
@@ -8,6 +9,7 @@ function LoginForm({loginUrl}) {
   const [errorMessage, setErrorMessage] = useState("");
 
   const { login, username: loggedInUsername } = useAuth();
+  const navigate = useNavigate(); // ✅ เรียก useNavigate
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -22,9 +24,10 @@ function LoginForm({loginUrl}) {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-        alert("Login successful.  access token = " + data.access_token);
-
+        // alert("Login successful.  access token = " + data.access_token); // ✅ ลบ alert ออก
         login(username, data.access_token);
+
+        navigate('/'); // ✅ redirect ไปหน้าหลักหลัง login สำเร็จ
       } else if (response.status === 401) {
         setErrorMessage("Invalid username or password");
       }

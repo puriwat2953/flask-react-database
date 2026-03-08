@@ -1,19 +1,26 @@
 import { useState, useEffect } from 'react'
 import TodoItem from './TodoItem.jsx'
+import { useAuth } from './context/AuthContext.jsx';
+
 import './App.css'
 
-function TodoList() {
-  const TODOLIST_API_URL = 'http://localhost:5000/api/todos/';
+function TodoList({ apiUrl }) {
+  const TODOLIST_API_URL = apiUrl;
   const [todoList, setTodoList] = useState([]);
   const [newTitle, setNewTitle] = useState("");
+  const { username, token, logout } = useAuth();
 
   useEffect(() => {
     fetchTodoList();
-  }, []);
+  }, [username]); // ✅ เพิ่ม username ในรายการ
 
   async function fetchTodoList() {
     try {
-      const response = await fetch(TODOLIST_API_URL);
+      const response = await fetch(TODOLIST_API_URL, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (!response.ok) {
         throw new Error('Network error');
       }
@@ -21,6 +28,7 @@ function TodoList() {
       setTodoList(data);
     } catch (err) {
       console.error("Failed to fetch todo list:", err);
+      setTodoList([]); // ✅ เคลียร์รายการเมื่อเกิด error
     }
   }
 
@@ -114,6 +122,13 @@ function TodoList() {
         onChange={(e) => setNewTitle(e.target.value)}
       />
       <button onClick={addNewTodo}>Add</button>
+
+      <br/>
+      <a href="/about">About</a>
+      <br/>
+      {username && (
+        <a href="#" onClick={(e) => { e.preventDefault(); logout(); }}>Logout</a>
+      )}
     </>
   );
 }

@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy import Integer, String, Boolean, ForeignKey
-
+from flask_bcrypt import generate_password_hash, check_password_hash
 # --------------------
 # Base + db
 # --------------------

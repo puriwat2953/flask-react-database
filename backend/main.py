@@ -7,15 +7,17 @@ from models import db, TodoItem, Comment
 from models import User
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from flask_jwt_extended import JWTManager
+import os
+
 # --------------------
 # App setup
 # --------------------
 app = Flask(__name__)
 CORS(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///todos.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI','sqlite:///todos.db') 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config['JWT_SECRET_KEY'] = 'fdsjkfjioi2rjshr2345hrsh043j5oij5545'
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY','fdslkfjsdlkufewhjroiewurewrew')
 jwt = JWTManager(app)
 
 db.init_app(app)
@@ -103,14 +105,23 @@ def add_comment(todo_id):
 @click.argument("full_name")
 @click.argument("password")
 def create_user(username, full_name, password):
+
     print(username, full_name, password)
+
+    # เช็ค user ก่อน
+    user = User.query.filter_by(username=username).first()
+
     if user:
         click.echo("User already exists.")
         return
+
+    # สร้าง user ใหม่
     user = User(username=username, full_name=full_name)
     user.set_password(password)
+
     db.session.add(user)
     db.session.commit()
+
     click.echo(f"User {username} created successfully.")
 
 @app.route('/api/login/', methods=['POST'])

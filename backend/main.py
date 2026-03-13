@@ -8,12 +8,26 @@ from models import User
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from flask_jwt_extended import JWTManager
 import os
+from flask import send_from_directory
 
 # --------------------
 # App setup
 # --------------------
 app = Flask(__name__)
 CORS(app)
+
+# Try to import local config, but fail gracefully in production
+try:
+    from local_config import CONFIG_DB_URI, CONFIG_JWT_SECRET
+except ImportError:
+    # local_config.py doesn't exist (expected in Cloud Run)
+    CONFIG_DB_URI = 'sqlite:///todos.db'
+    CONFIG_JWT_SECRET = 'fdslkfjsdlkufewhjroiewurewrew'
+except Exception as e:
+    # local_config exists but has errors
+    print(f"Warning: Error loading local_config: {e}")
+    CONFIG_DB_URI = 'sqlite:///todos.db'
+    CONFIG_JWT_SECRET = 'fdslkfjsdlkufewhjroiewurewrew'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI','sqlite:///todos.db') 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -34,6 +48,14 @@ with app.app_context():
             TodoItem(title="Build a Flask App")
         ])
         db.session.commit()
+    
+    # Create default user if not exists
+    if User.query.filter_by(username="admin").first() is None:
+        user = User(username="admin", full_name="Administrator")
+        user.set_password("admin123")
+        db.session.add(user)
+        db.session.commit()
+        print("Default user created: admin / admin123")
 
 # --------------------
 # Helpers
@@ -140,6 +162,20 @@ def login():
 # --------------------
 # Run
 # --------------------
+
+# Catch-all route: if the requested file exists in frontend-static, serve it;
+# otherwise fall back to serving the React app's index.html.
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_frontend(path):
+    static_dir = os.path.join(app.root_path, 'frontend-static')
+    # If a specific file is requested and exists, serve it
+    if path and os.path.isfile(os.path.join(static_dir, path)):
+        return send_from_directory('frontend-static', path)
+    # Otherwise serve the app entrypoint
+    return send_from_directory('frontend-static', 'index.html')
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    debug_mode = os.environ.get("FLASK_ENV", "development") != "production"
+    app.run(debug=debug_mode, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
 

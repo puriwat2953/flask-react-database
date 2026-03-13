@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom' // ✅ เพิ่ม import
-import { useAuth } from "./context/AuthContext.jsx"; // ✅ แก้ path
+import { useAuth } from "./AuthContext.jsx"; // ✅ แก้ path
 import './App.css'
 
 function LoginForm({loginUrl}) {

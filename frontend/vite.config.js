@@ -6,7 +6,20 @@ export default defineConfig({
   plugins: [react()],
   test: {
     globals: true, 
-    environment: 'jsdom',                   // รันเทสแบบไม่มี browser
-    setupFiles: './src/setupTests.js',      // ระบุโค้ดสำหรับเตรียมต่าง ๆ
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.js',
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000/',
+        changeOrigin: true,
+      },
+    },
+  },
+  build: {
+    // Output to dist folder (will be copied by Docker)
+    outDir: 'dist',
+    emptyOutDir: true,
   },
 })

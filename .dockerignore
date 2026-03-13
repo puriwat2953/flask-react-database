@@ -1,0 +1,30 @@
+# Docker
+.dockerignore
+Dockerfile
+
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Development
+.env
+local_config.py
+.pytest_cache/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+.gitignore
